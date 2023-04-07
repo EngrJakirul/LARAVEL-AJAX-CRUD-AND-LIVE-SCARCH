@@ -58,6 +58,7 @@
 </script>
 
 <script>
+    //product update er jonno
     $(document).on('click', '.update_product', function (e) {
         e.preventDefault();
         let update_id = $('#update_id').val();
@@ -84,23 +85,59 @@
         });
     })
 
+    //product delete er jonno
     $(document).on('click', '.delete_product', function (e) {
         e.preventDefault();
         let product_id = $(this).data('id');
-        if(confirm('Are you sure to delete product')){
-            $.ajax({
-                url: "{{route('product.delete')}}",
-                method:'post',
-                data:{product_id:product_id},
-                success:function (res) {
-                    if(res.status == 'success'){
-                        $('#table').load(location.href+' #table');
-                    }
+        $.ajax({
+            url: "{{route('product.delete')}}",
+            method:'post',
+            data:{product_id:product_id},
+            success:function (res) {
+                if(res.status == 'success'){
+                    $('#table').load(location.href+' #table');
                 }
-            });
-        }
+            }
+        });
+        // if(confirm('Are you sure to delete product')){
+        //
+        // }
 
 
+    })
+
+    //ajax pagination er jonno
+    $(document).on('click', '.pagination a', function (e) {
+        e.preventDefault();
+        let page = $(this).attr('href').split('page=')[1]
+        product(page)
+    })
+
+    function product(page) {
+        $.ajax({
+            url:"/pagination/paginate-data?page"+page,
+            success:function (res) {
+                $('.table-data').html(res);
+            }
+        });
+    }
+
+    $(document).on('keyup', function (e) {
+        e.preventDefault();
+
+        let search_string = $('#search').val();
+        $.ajax({
+            url: "{{route('product.search')}}",
+            method: "GET",
+            data:{search_string:search_string},
+            success:function (res) {
+                $('.table-data').html(res);
+                if(res.status == 'nothing_found')
+                {
+                    $('.table-data').html('<span class="text-danger">'+'Nothing Found'+'</span>');
+                }
+            }
+        });
     })
 </script>
 

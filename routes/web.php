@@ -17,3 +17,5 @@ Route::get('/', [ProductController::class, 'index'])->name('product.home');
 Route::post('/add-product', [ProductController::class, 'addProduct'])->name('product.add');
 Route::post('/update-product', [ProductController::class, 'updateProduct'])->name('product.update');
 Route::post('/delete-product', [ProductController::class, 'deleteProduct'])->name('product.delete');
+Route::get('/pagination/paginate-data', [ProductController::class, 'pagination'])->name('pagination');
+Route::get('/search-product', [ProductController::class, 'searchProduct'])->name('product.search');

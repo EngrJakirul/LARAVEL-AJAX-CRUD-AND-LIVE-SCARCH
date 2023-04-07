@@ -73,4 +73,27 @@ class ProductController extends Controller
             'status' => 'success',
         ]);
     }
+
+    public function pagination(Request $request)
+    {
+        $this->products = Product::orderBy('id', 'DESC')->paginate(5);
+        return view('admin.product.pagination_products.index', [
+            'products' => $this->products,
+        ]);
+    }
+
+    public function searchProduct(Request $request)
+    {
+        $products = Product::where('name','like','%'.$request->search_string.'%')->orWhere('price','like','%'.$request->search_string.'%')->orderBy('id','DESC')->paginate(5);
+        if($products->count() >= 1){
+            return view('admin.product.pagination_products.index', [
+                'products' => $products,
+            ]);
+
+        }else{
+            return response()->json([
+                'status' => 'nothing_found',
+            ]);
+        }
+    }
 }
